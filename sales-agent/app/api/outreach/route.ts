@@ -48,9 +48,10 @@ export async function POST(request: Request) {
       throw err;
     }
   } catch (error) {
-    console.error("API route error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("API route error:", message);
     return NextResponse.json(
-      { error: "Failed to generate content. Please try again." },
+      { error: `Failed to generate content: ${message}` },
       { status: 500 }
     );
   }

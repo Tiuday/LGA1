@@ -9,8 +9,8 @@ export const openrouter = new OpenAI({
   },
 });
 
-// Swap this single line to change the model across the entire app
-export const OPENROUTER_MODEL = "google/gemini-2.0-flash-exp:free";
+// Primary free model. Fallback: google/gemma-4-26b-a4b-it:free
+export const OPENROUTER_MODEL = "google/gemma-4-31b-it:free";
 
 export const OUTREACH_PROMPTS: Record<
   AssetType,
