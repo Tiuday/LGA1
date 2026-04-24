@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-brand: #06B6D4;
+  --color-brand-light: #67E8F9;
+  --color-brand-dark: #0E7490;
+  --color-brand-glow: rgba(6, 182, 212, 0.2);
+
+  /* Surface colors */
+  --color-surface-1: #080808;
+  --color-surface-2: #0c0c0c;
+  --color-surface-3: #111111;
+  --color-surface-border: #1a1a1a;
+
+  /* Asset node colors */
+  --color-node-email: #06B6D4;
+  --color-node-linkedin: #0A66C2;
+  --color-node-followup: #F59E0B;
+  --color-node-call: #10B981;
+  --color-node-breakup: #EF4444;
+
+  /* Fonts */
+  --font-display: var(--font-syne), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* Animations */
+  --animate-glow-pulse: glowPulse 2s ease-in-out infinite;
+  --animate-fade-up: fadeUp 0.4s ease forwards;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #080808;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #080808;
+  color: #ededed;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: rgba(6, 182, 212, 0.3);
+  color: #ffffff;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #080808; }
+::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
