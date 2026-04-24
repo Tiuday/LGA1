@@ -9,8 +9,13 @@ export const openrouter = new OpenAI({
   },
 });
 
-// Primary free model. Fallback: google/gemma-4-26b-a4b-it:free
-export const OPENROUTER_MODEL = "google/gemma-4-31b-it:free";
+// Tried in order — moves to next if one rate-limits or errors
+export const FREE_MODEL_CHAIN = [
+  "google/gemma-4-31b-it:free",
+  "nvidia/nemotron-3-super-120b-a12b:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "minimax/minimax-m2.5:free",
+];
 
 export const OUTREACH_PROMPTS: Record<
   AssetType,

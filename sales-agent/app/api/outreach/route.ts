@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { openrouter, OUTREACH_PROMPTS, OPENROUTER_MODEL } from "@/lib/anthropic";
+import { openrouter, OUTREACH_PROMPTS, FREE_MODEL_CHAIN } from "@/lib/anthropic";
 import type { AssetType, GenerateRequest } from "@/lib/types";
 
 export async function POST(request: Request) {
@@ -29,24 +29,29 @@ export async function POST(request: Request) {
     const promptFn = OUTREACH_PROMPTS[assetType as AssetType];
     const prompt = promptFn({ prospectName, company, offer, tone: tone as never });
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    let lastError = "";
 
-    try {
-      const completion = await openrouter.chat.completions.create({
-        model: OPENROUTER_MODEL,
-        max_tokens: 1024,
-        messages: [{ role: "user", content: prompt }],
-      });
+    for (const model of FREE_MODEL_CHAIN) {
+      try {
+        const completion = await openrouter.chat.completions.create({
+          model,
+          max_tokens: 1024,
+          messages: [{ role: "user", content: prompt }],
+        });
 
-      clearTimeout(timeout);
-
-      const result = completion.choices[0]?.message?.content ?? "";
-      return NextResponse.json({ result });
-    } catch (err) {
-      clearTimeout(timeout);
-      throw err;
+        const result = completion.choices[0]?.message?.content ?? "";
+        console.log(`Generated with model: ${model}`);
+        return NextResponse.json({ result });
+      } catch (err) {
+        lastError = err instanceof Error ? err.message : String(err);
+        console.warn(`Model ${model} failed: ${lastError} — trying next`);
+      }
     }
+
+    return NextResponse.json(
+      { error: `All models failed. Last error: ${lastError}` },
+      { status: 500 }
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("API route error:", message);
