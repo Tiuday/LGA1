@@ -6,23 +6,14 @@ import { buildAllAssetsText } from "@/lib/utils";
 import { ASSET_ORDER } from "@/lib/types";
 import type { SequenceMap } from "@/lib/types";
 import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, RotateCcw } from "lucide-react";
 
 interface SequenceGridProps {
   sequences: SequenceMap;
-  onSave: () => void;
   onReset: () => void;
-  saving: boolean;
-  saved: boolean;
 }
 
-export function SequenceGrid({
-  sequences,
-  onSave,
-  onReset,
-  saving,
-  saved,
-}: SequenceGridProps) {
+export function SequenceGrid({ sequences, onReset }: SequenceGridProps) {
   const [copiedAll, setCopiedAll] = useState<boolean>(false);
 
   async function handleCopyAll() {
@@ -44,23 +35,12 @@ export function SequenceGrid({
           Generated Sequence
         </h2>
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopyAll}
-          >
+          <Button variant="ghost" size="sm" onClick={handleCopyAll}>
             {copiedAll ? <Check size={11} /> : <Copy size={11} />}
             {copiedAll ? "Copied All" : "Copy All"}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onSave}
-            disabled={saving || saved}
-          >
-            {saving ? "Saving..." : saved ? "Saved" : "Save to Prospects"}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={onReset}>
+          <Button variant="outline" size="sm" onClick={onReset}>
+            <RotateCcw size={11} />
             New Sequence
           </Button>
         </div>

@@ -1,19 +1,9 @@
 import { NextResponse } from "next/server";
 import { openrouter, OUTREACH_PROMPTS, OPENROUTER_MODEL } from "@/lib/anthropic";
-import { createClient } from "@/lib/supabase/server";
 import type { AssetType, GenerateRequest } from "@/lib/types";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body: GenerateRequest = await request.json();
     const { assetType, prospectName, company, offer, tone } = body;
 
@@ -52,7 +42,6 @@ export async function POST(request: Request) {
       clearTimeout(timeout);
 
       const result = completion.choices[0]?.message?.content ?? "";
-
       return NextResponse.json({ result });
     } catch (err) {
       clearTimeout(timeout);
